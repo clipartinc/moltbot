@@ -45,7 +45,7 @@ RUN mkdir -p /data && chown -R node:node /data
 ENV PORT=8080
 
 # USER node  <-- remove / comment out
-CMD ["sh", "-lc", "mkdir -p /data/.clawdbot /data/workspace || true; node dist/index.js setup || true; node dist/index.js gateway --port ${PORT:-8080}"]
+CMD ["sh", "-lc", "mkdir -p /data/.clawdbot /data/workspace || true; node dist/index.js setup || true; node dist/index.js gateway --port ${PORT:-8080} --allow-unconfigured"]
 
 
 
