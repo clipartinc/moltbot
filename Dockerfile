@@ -32,6 +32,10 @@ RUN pnpm ui:build
 
 ENV NODE_ENV=production
 
+
+# Ensure persistent volume is writable by non-root user
+RUN mkdir -p /data && chown -R node:node /data
+
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
@@ -40,5 +44,5 @@ USER node
 # Railway sets PORT; default to 8080 locally
 ENV PORT=8080
 
-CMD ["sh", "-lc", "node dist/index.js setup || true; node dist/index.js onboard || true; node dist/index.js gateway --port ${PORT:-8080}"]
+CMD ["sh", "-lc", "node dist/index.js gateway --port ${PORT:-8080}"]
 
