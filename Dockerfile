@@ -40,4 +40,4 @@ USER node
 # Railway sets PORT; default to 8080 locally
 ENV PORT=8080
 
-CMD ["sh", "-lc", "node dist/index.js gateway --host 0.0.0.0 --port ${PORT:-8080}"]
+CMD ["sh", "-lc", "node dist/index.js gateway --port ${PORT:-8080}"]
