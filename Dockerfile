@@ -44,5 +44,6 @@ USER node
 # Railway sets PORT; default to 8080 locally
 ENV PORT=8080
 
-CMD ["sh", "-lc", "node dist/index.js gateway --port ${PORT:-8080}"]
+CMD ["sh", "-lc", "mkdir -p /data/.clawdbot /data/workspace || true; node dist/index.js setup || true; node dist/index.js gateway --port ${PORT:-8080}"]
+
 
