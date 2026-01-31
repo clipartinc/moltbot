@@ -58,23 +58,25 @@ ENV MOLTBOT_HOOKS_ENABLED=true
 # Enable verbose logging to debug Discord
 ENV CLAWDBOT_LOG_VERBOSE=1
 
-# USER node  <-- remove / comment out
-# Copy workspace files at runtime (after volume is mounted), then start gateway
-CMD ["sh", "-lc", "\
-  rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true && \
-  mkdir -p /data/workspace && \
-  cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md && \
-  cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md && \
-  cp -rf /app/workspace-init/openclaw-skills /data/workspace/ && \
-  echo '✅ Workspace files copied, TOOLS.md removed' && \
-  echo '⚙️ Configuring Discord...' && \
-  node dist/index.js config set channels.discord.enabled true || true && \
-  node dist/index.js config set channels.discord.groupPolicy open || true && \
-  node dist/index.js config set channels.discord.requireMention false || true && \
-  node dist/index.js config set channels.discord.dm.policy open || true && \
-  node dist/index.js config set channels.discord.dm.allowFrom '["*"]' || true && \
-  echo '✅ Discord configured' && \
-  node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
+# Create startup script
+RUN printf '#!/bin/sh\n\
+set -e\n\
+rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true\n\
+mkdir -p /data/workspace\n\
+cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md\n\
+cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md\n\
+cp -rf /app/workspace-init/openclaw-skills /data/workspace/\n\
+echo "Workspace files copied"\n\
+echo "Configuring Discord..."\n\
+node dist/index.js config set channels.discord.enabled true || true\n\
+node dist/index.js config set channels.discord.groupPolicy open || true\n\
+node dist/index.js config set channels.discord.requireMention false || true\n\
+node dist/index.js config set channels.discord.dm.policy open || true\n\
+echo "Discord configured"\n\
+exec node dist/index.js gateway --bind lan --port ${PORT:-8080}\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
 
 
 
