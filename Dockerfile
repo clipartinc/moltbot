@@ -36,6 +36,12 @@ ENV NODE_ENV=production
 # Ensure persistent volume is writable by non-root user
 RUN mkdir -p /data && chown -R node:node /data
 
+# Copy workspace templates and skills
+RUN mkdir -p /data/workspace/skills
+COPY workspace-templates/AGENTS.md /data/workspace/AGENTS.md
+COPY workspace-templates/SOUL.md /data/workspace/SOUL.md
+COPY openclaw-skills /data/workspace/openclaw-skills
+
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
