@@ -50,8 +50,17 @@ COPY openclaw-skills /data/workspace/openclaw-skills
 # Railway sets PORT; default to 8080 locally
 ENV PORT=8080
 
+# Hooks configuration (set via environment variables)
+ENV MOLTBOT_HOOKS_ENABLED=true
+
 # USER node  <-- remove / comment out
-CMD ["sh", "-lc", "node dist/index.js config set gateway.mode local || true; node dist/index.js gateway --port ${PORT:-8080}"]
+CMD ["sh", "-lc", "\
+  node dist/index.js config set gateway.mode local || true && \
+  node dist/index.js config set gateway.bind 0.0.0.0 || true && \
+  node dist/index.js config set gateway.hooks.enabled true || true && \
+  node dist/index.js config set gateway.hooks.basePath /hooks || true && \
+  if [ -n \"$MOLTBOT_HOOKS_TOKEN\" ]; then node dist/index.js config set gateway.hooks.token \"$MOLTBOT_HOOKS_TOKEN\"; fi && \
+  node dist/index.js gateway --bind 0.0.0.0 --port ${PORT:-8080}"]
 
 
 
