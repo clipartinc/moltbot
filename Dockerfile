@@ -50,6 +50,9 @@ COPY openclaw-skills /data/workspace/openclaw-skills
 # Railway sets PORT; default to 8080 locally
 ENV PORT=8080
 
+# Expose port for Railway private networking
+EXPOSE 8080
+
 # Hooks configuration (set via environment variables)
 ENV MOLTBOT_HOOKS_ENABLED=true
 
