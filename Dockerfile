@@ -55,8 +55,6 @@ EXPOSE 8080
 
 # Hooks configuration (set via environment variables)
 ENV MOLTBOT_HOOKS_ENABLED=true
-# Enable verbose logging to debug Discord
-ENV CLAWDBOT_LOG_VERBOSE=1
 
 # Create startup script
 RUN printf '#!/bin/sh\n\
@@ -72,7 +70,7 @@ node dist/index.js config set channels.discord.enabled true || true\n\
 node dist/index.js config set channels.discord.groupPolicy open || true\n\
 node dist/index.js config set channels.discord.dm.policy open || true\n\
 echo "Discord configured"\n\
-exec node dist/index.js gateway --bind lan --port ${PORT:-8080}\n\
+exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
 CMD ["/app/start.sh"]
