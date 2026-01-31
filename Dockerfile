@@ -57,9 +57,10 @@ EXPOSE 8080
 ENV MOLTBOT_HOOKS_ENABLED=true
 
 # USER node  <-- remove / comment out
+# Trust Railway's proxy for proper client detection
 CMD ["sh", "-lc", "\
   rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true && \
-  node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
+  node dist/index.js gateway --bind lan --port ${PORT:-8080} --trust-proxy"]
 
 
 
