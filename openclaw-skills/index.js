@@ -16,6 +16,7 @@ export * from './options-scanner.js'
 export * from './market-research.js'
 export * from './options-calculator.js'
 export * from './news-crawler.js'
+export * from './scheduled-trends.js'
 
 // Skill metadata for OpenClaw
 export const skillInfo = {
