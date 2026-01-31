@@ -69,6 +69,8 @@ echo "Configuring Discord..."\n\
 node dist/index.js config set channels.discord.enabled true || true\n\
 node dist/index.js config set channels.discord.groupPolicy open || true\n\
 node dist/index.js config set channels.discord.dm.policy open || true\n\
+node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true\n\
+node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true\n\
 echo "Discord configured"\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
