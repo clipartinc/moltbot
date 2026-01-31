@@ -70,7 +70,6 @@ echo "Workspace files copied"\n\
 echo "Configuring Discord..."\n\
 node dist/index.js config set channels.discord.enabled true || true\n\
 node dist/index.js config set channels.discord.groupPolicy open || true\n\
-node dist/index.js config set channels.discord.requireMention false || true\n\
 node dist/index.js config set channels.discord.dm.policy open || true\n\
 echo "Discord configured"\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080}\n\
