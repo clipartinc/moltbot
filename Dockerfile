@@ -61,7 +61,6 @@ ENV MOLTBOT_HOOKS_ENABLED=true
 CMD ["sh", "-lc", "\
   rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true && \
   mkdir -p /data/workspace && \
-  rm -f /data/workspace/TOOLS.md 2>/dev/null || true && \
   cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md && \
   cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md && \
   cp -rf /app/workspace-init/openclaw-skills /data/workspace/ && \
