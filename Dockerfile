@@ -67,6 +67,7 @@ CMD ["sh", "-lc", "\
   echo '✅ Workspace files copied, TOOLS.md removed' && \
   node dist/index.js config set channels.discord.enabled true 2>/dev/null || true && \
   node dist/index.js config set channels.discord.groupPolicy open 2>/dev/null || true && \
+  node dist/index.js config set channels.discord.requireMention false 2>/dev/null || true && \
   node dist/index.js config set channels.discord.dm.policy open 2>/dev/null || true && \
   node dist/index.js config set 'channels.discord.dm.allowFrom' '[\"*\"]' 2>/dev/null || true && \
   node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
