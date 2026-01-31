@@ -17,6 +17,7 @@ export * from './market-research.js'
 export * from './options-calculator.js'
 export * from './news-crawler.js'
 export * from './scheduled-trends.js'
+export * from './money-maker.js'
 
 // Skill metadata for OpenClaw
 export const skillInfo = {
@@ -47,6 +48,13 @@ export const skillInfo = {
     { name: 'getTrendingNews', description: 'Get trending news for a category' },
     { name: 'getFullTrendReport', description: 'Comprehensive trend report across all categories' },
     { name: 'getBreakingMarketNews', description: 'Get breaking market news' },
-    { name: 'searchTopicNews', description: 'Search news on a specific topic' }
+    { name: 'searchTopicNews', description: 'Search news on a specific topic' },
+    
+    // Money Maker
+    { name: 'getTrendingProducts', description: 'Find trending products to sell' },
+    { name: 'getInDemandServices', description: 'Find services in high demand' },
+    { name: 'getSideHustleIdeas', description: 'Get side hustle ideas' },
+    { name: 'getDigitalProductIdeas', description: 'Find digital product opportunities' },
+    { name: 'getAffiliateOpportunities', description: 'Find affiliate programs' }
   ]
 }

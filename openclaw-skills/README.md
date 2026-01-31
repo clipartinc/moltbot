@@ -29,6 +29,14 @@ Copy the `openclaw-skills/` folder to your OpenClaw workspace directory.
 - "Give me a full trend report"
 - "What's trending in crypto?"
 
+### Money-Making Opportunities
+- "Find trending products to sell"
+- "What services are in demand?"
+- "Give me side hustle ideas"
+- "What digital products should I create?"
+- "Find affiliate programs to join"
+- "Give me a full opportunity report"
+
 ### Options Scanning
 - "Scan NVDA for options opportunities"
 - "Find puts to sell on SPY"
@@ -59,6 +67,17 @@ Copy the `openclaw-skills/` folder to your OpenClaw workspace directory.
 | `getFullTrendReport()` | Scan all categories at once |
 | `getBreakingMarketNews()` | Latest breaking market news |
 | `searchTopicNews(topic, limit)` | Search news on any topic |
+
+### Money Maker
+
+| Function | Description |
+|----------|-------------|
+| `getTrendingProducts()` | Trending products to sell (dropshipping, FBA, Etsy) |
+| `getInDemandServices()` | High-demand services to offer |
+| `getSideHustleIdeas()` | Side hustle and passive income ideas |
+| `getDigitalProductIdeas()` | Digital products, courses, SaaS ideas |
+| `getAffiliateOpportunities()` | High-paying affiliate programs |
+| `getFullOpportunityReport()` | Comprehensive report across all categories |
 
 ### Options Scanner
 
