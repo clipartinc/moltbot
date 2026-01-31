@@ -36,11 +36,11 @@ ENV NODE_ENV=production
 # Ensure persistent volume is writable by non-root user
 RUN mkdir -p /data && chown -R node:node /data
 
-# Copy workspace templates and skills
-RUN mkdir -p /data/workspace/skills
-COPY workspace-templates/AGENTS.md /data/workspace/AGENTS.md
-COPY workspace-templates/SOUL.md /data/workspace/SOUL.md
-COPY openclaw-skills /data/workspace/openclaw-skills
+# Copy workspace templates to a staging area (will be copied to /data at runtime)
+RUN mkdir -p /app/workspace-init
+COPY workspace-templates/AGENTS.md /app/workspace-init/AGENTS.md
+COPY workspace-templates/SOUL.md /app/workspace-init/SOUL.md
+COPY openclaw-skills /app/workspace-init/openclaw-skills
 
 # Security hardening: Run as non-root user
 # The node:22-bookworm image includes a 'node' user (uid 1000)
@@ -57,8 +57,15 @@ EXPOSE 8080
 ENV MOLTBOT_HOOKS_ENABLED=true
 
 # USER node  <-- remove / comment out
+# Copy workspace files at runtime (after volume is mounted), then start gateway
 CMD ["sh", "-lc", "\
   rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true && \
+  mkdir -p /data/workspace && \
+  rm -f /data/workspace/TOOLS.md 2>/dev/null || true && \
+  cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md && \
+  cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md && \
+  cp -rf /app/workspace-init/openclaw-skills /data/workspace/ && \
+  echo '✅ Workspace files copied, TOOLS.md removed' && \
   node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
 
 
