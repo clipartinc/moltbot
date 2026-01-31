@@ -55,9 +55,8 @@ ENV MOLTBOT_HOOKS_ENABLED=true
 
 # USER node  <-- remove / comment out
 CMD ["sh", "-lc", "\
-  node dist/index.js config set gateway.mode local || true && \
-  node dist/index.js config set gateway.bind lan || true && \
-  node dist/index.js gateway --port ${PORT:-8080}"]
+  rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true && \
+  node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
 
 
 
