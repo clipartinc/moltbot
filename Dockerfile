@@ -66,6 +66,7 @@ CMD ["sh", "-lc", "\
   cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md && \
   cp -rf /app/workspace-init/openclaw-skills /data/workspace/ && \
   echo '✅ Workspace files copied, TOOLS.md removed' && \
+  node dist/index.js config set channels.discord.enabled true 2>/dev/null || true && \
   node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
 
 
