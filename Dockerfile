@@ -67,11 +67,13 @@ CMD ["sh", "-lc", "\
   cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md && \
   cp -rf /app/workspace-init/openclaw-skills /data/workspace/ && \
   echo '✅ Workspace files copied, TOOLS.md removed' && \
-  node dist/index.js config set channels.discord.enabled true 2>/dev/null || true && \
-  node dist/index.js config set channels.discord.groupPolicy open 2>/dev/null || true && \
-  node dist/index.js config set channels.discord.requireMention false 2>/dev/null || true && \
-  node dist/index.js config set channels.discord.dm.policy open 2>/dev/null || true && \
-  node dist/index.js config set 'channels.discord.dm.allowFrom' '[\"*\"]' 2>/dev/null || true && \
+  echo '⚙️ Configuring Discord...' && \
+  node dist/index.js config set channels.discord.enabled true || true && \
+  node dist/index.js config set channels.discord.groupPolicy open || true && \
+  node dist/index.js config set channels.discord.requireMention false || true && \
+  node dist/index.js config set channels.discord.dm.policy open || true && \
+  node dist/index.js config set channels.discord.dm.allowFrom '["*"]' || true && \
+  echo '✅ Discord configured' && \
   node dist/index.js gateway --bind lan --port ${PORT:-8080}"]
 
 
