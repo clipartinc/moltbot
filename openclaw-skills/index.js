@@ -15,6 +15,7 @@
 export * from './options-scanner.js'
 export * from './market-research.js'
 export * from './options-calculator.js'
+export * from './news-crawler.js'
 
 // Skill metadata for OpenClaw
 export const skillInfo = {
@@ -39,6 +40,12 @@ export const skillInfo = {
     { name: 'coveredCall', description: 'Calculate covered call returns' },
     { name: 'positionSize', description: 'Calculate position size by risk' },
     { name: 'annualizeReturn', description: 'Annualize option returns' },
-    { name: 'wheelStrategy', description: 'Calculate wheel strategy metrics' }
+    { name: 'wheelStrategy', description: 'Calculate wheel strategy metrics' },
+    
+    // News Crawler
+    { name: 'getTrendingNews', description: 'Get trending news for a category' },
+    { name: 'getFullTrendReport', description: 'Comprehensive trend report across all categories' },
+    { name: 'getBreakingMarketNews', description: 'Get breaking market news' },
+    { name: 'searchTopicNews', description: 'Search news on a specific topic' }
   ]
 }

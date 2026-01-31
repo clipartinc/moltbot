@@ -21,6 +21,14 @@ Copy the `openclaw-skills/` folder to your OpenClaw workspace directory.
 
 ## What You Can Ask ClawBot
 
+### News & Trends
+- "What's trending in the markets?"
+- "Get trending tech news"
+- "Find breaking market news"
+- "Search news about Federal Reserve"
+- "Give me a full trend report"
+- "What's trending in crypto?"
+
 ### Options Scanning
 - "Scan NVDA for options opportunities"
 - "Find puts to sell on SPY"
@@ -42,6 +50,15 @@ Copy the `openclaw-skills/` folder to your OpenClaw workspace directory.
 - "Walk me through the wheel strategy on AMD at $120"
 
 ## Functions Reference
+
+### News Crawler
+
+| Function | Description |
+|----------|-------------|
+| `getTrendingNews(category)` | Get trends for: markets, tech, crypto, economy, options |
+| `getFullTrendReport()` | Scan all categories at once |
+| `getBreakingMarketNews()` | Latest breaking market news |
+| `searchTopicNews(topic, limit)` | Search news on any topic |
 
 ### Options Scanner
 
