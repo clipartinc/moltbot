@@ -27,6 +27,7 @@ When posting to Discord, use these channel IDs:
 
 | Channel | ID | Purpose |
 |---------|-----|---------|
+| #mybot-logs | 1466969431027482836 | Admin commands and conversations |
 | #mybot-admin | 1466969478871912642 | Admin commands and conversations |
 | #mybot-options | 1466974600574275753 | Hourly market trend updates |
 | #trends | 1467018957373444179 | Hourly market trend updates |
