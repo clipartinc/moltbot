@@ -55,6 +55,8 @@ EXPOSE 8080
 
 # Hooks configuration (set via environment variables)
 ENV MOLTBOT_HOOKS_ENABLED=true
+# Enable verbose logging to debug Discord
+ENV CLAWDBOT_LOG_VERBOSE=1
 
 # USER node  <-- remove / comment out
 # Copy workspace files at runtime (after volume is mounted), then start gateway
