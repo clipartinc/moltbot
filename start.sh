@@ -28,17 +28,14 @@ echo "Setting up model: OpenAI gpt-4o"
 node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true
 echo "Model configured"
 
-# Configure gateway auth
+# Configure gateway auth mode (token value comes from env var at runtime)
 if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then
   echo "Gateway token auth enabled"
   node dist/index.js config set gateway.auth.mode token || true
-  node dist/index.js config set gateway.auth.token "$CLAWDBOT_GATEWAY_TOKEN" || true
 fi
-
 if [ -n "$CLAWDBOT_GATEWAY_PASSWORD" ]; then
   echo "Gateway password auth enabled"
   node dist/index.js config set gateway.auth.mode password || true
-  node dist/index.js config set gateway.auth.password "$CLAWDBOT_GATEWAY_PASSWORD" || true
 fi
 
 # Start gateway
