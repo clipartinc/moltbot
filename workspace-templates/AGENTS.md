@@ -83,20 +83,20 @@ Continuously scan for high-value opportunities and alert the user to actionable 
 
 **Guild/Server ID: 1466968054079684608**
 
-| Channel | ID | Use For |
-|---------|-----|---------|
-| #mybot-logs | 1466969431027482836 | System logs |
-| #mybot-admin | 1466969478871912642 | Admin chat |
-| #mybot-options | 1466974600574275753 | Stock/options opportunities |
-| #trends | 1467018957373444179 | Crypto, metals, market trends |
-| #alerts | 1467049760673501324 | URGENT breaking news only |
-| #market-open | 1467049803065196655 | Daily market open/close summaries |
-| #opportunities | 1467054476157386773 | Business & app ideas |
-| #crypto | 1467314714957582500 | Crypto ideas |
-| #metals | 1467315337514057893 | Metal ideas |
-| #collectibles | 1467315388491497719 | Collectibles ideas |
+| Channel | Target (use this to post) | Use For |
+|---------|---------------------------|---------|
+| #mybot-logs | channel:1466969431027482836 | System logs |
+| #mybot-admin | channel:1466969478871912642 | Admin chat |
+| #mybot-options | channel:1466974600574275753 | Stock/options opportunities |
+| #trends | channel:1467018957373444179 | Crypto, metals, market trends |
+| #alerts | channel:1467049760673501324 | URGENT breaking news only |
+| #market-open | channel:1467049803065196655 | Daily market open/close summaries |
+| #opportunities | channel:1467054476157386773 | Business & app ideas |
+| #crypto | channel:1467314714957582500 | Crypto ideas |
+| #metals | channel:1467315337514057893 | Metal ideas |
+| #collectibles | channel:1467315388491497719 | Collectibles ideas |
 
-**Always use channel ID, not name, when posting. Guild: 1466968054079684608**
+**IMPORTANT: Always use `channel:ID` format when posting (e.g., `channel:1467018957373444179` for #trends).**
 
 ---
 
