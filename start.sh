@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "Starting Moltbot..."
+
 # Cleanup old config and lock files
 rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true
 echo "Cleaning up stale lock files..."
@@ -28,15 +30,12 @@ echo "Setting up model: OpenAI gpt-4o"
 node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true
 echo "Model configured"
 
-# Configure gateway auth mode (token value comes from env var at runtime)
+# Configure gateway auth
 if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then
   echo "Gateway token auth enabled"
   node dist/index.js config set gateway.auth.mode token || true
 fi
-if [ -n "$CLAWDBOT_GATEWAY_PASSWORD" ]; then
-  echo "Gateway password auth enabled"
-  node dist/index.js config set gateway.auth.mode password || true
-fi
 
 # Start gateway
+echo "Starting gateway..."
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose
