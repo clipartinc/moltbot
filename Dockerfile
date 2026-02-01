@@ -56,44 +56,9 @@ EXPOSE 8080
 # Hooks configuration (set via environment variables)
 ENV MOLTBOT_HOOKS_ENABLED=true
 
-# Create startup script
-# MODEL OPTIONS (set MOLTBOT_MODEL env var in Railway):
-#   Budget:    openai/gpt-4o-mini, google/gemini-1.5-flash, anthropic/claude-haiku-4-5
-#   Balanced:  openai/gpt-4o, google/gemini-1.5-pro, anthropic/claude-sonnet-4
-#   Premium:   anthropic/claude-opus-4-5 (default)
-RUN printf '#!/bin/sh\n\
-set -e\n\
-rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true\n\
-echo "Cleaning up stale lock files..."\n\
-find /data -name "*.lock" -type f -delete 2>/dev/null || true\n\
-find /root/.clawdbot -name "*.lock" -type f -delete 2>/dev/null || true\n\
-mkdir -p /data/workspace\n\
-cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md\n\
-cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md\n\
-cp -rf /app/workspace-init/openclaw-skills /data/workspace/\n\
-echo "Workspace files copied"\n\
-echo "Configuring Discord..."\n\
-node dist/index.js config set channels.discord.enabled true || true\n\
-node dist/index.js config set channels.discord.groupPolicy open || true\n\
-node dist/index.js config set channels.discord.dm.policy open || true\n\
-node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true\n\
-node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true\n\
-echo "Discord configured"\n\
-echo "Setting up model: OpenAI gpt-4o"\n\
-node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true\n\
-echo "Model configured"\n\
-if [ -n "\\$CLAWDBOT_GATEWAY_TOKEN" ]; then\n\
-  echo "Gateway token auth enabled"\n\
-  node dist/index.js config set gateway.auth.mode token || true\n\
-  node dist/index.js config set gateway.auth.token "\\$CLAWDBOT_GATEWAY_TOKEN" || true\n\
-fi\n\
-if [ -n "\\$CLAWDBOT_GATEWAY_PASSWORD" ]; then\n\
-  echo "Gateway password auth enabled"\n\
-  node dist/index.js config set gateway.auth.mode password || true\n\
-  node dist/index.js config set gateway.auth.password "\\$CLAWDBOT_GATEWAY_PASSWORD" || true\n\
-fi\n\
-exec node dist/index.js gateway --bind lan --port \\${PORT:-8080} --verbose\n\
-' > /app/start.sh && chmod +x /app/start.sh
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 CMD ["/app/start.sh"]
 
