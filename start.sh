@@ -34,6 +34,7 @@ echo "Model configured"
 if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then
   echo "Gateway token auth enabled"
   node dist/index.js config set gateway.auth.mode token || true
+  node dist/index.js config set gateway.controlUi.allowInsecureAuth true || true
 fi
 
 # Start gateway
