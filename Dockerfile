@@ -64,6 +64,9 @@ ENV MOLTBOT_HOOKS_ENABLED=true
 RUN printf '#!/bin/sh\n\
 set -e\n\
 rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true\n\
+echo "Cleaning up stale lock files..."\n\
+find /data -name "*.lock" -type f -delete 2>/dev/null || true\n\
+find /root/.clawdbot -name "*.lock" -type f -delete 2>/dev/null || true\n\
 mkdir -p /data/workspace\n\
 cp -f /app/workspace-init/AGENTS.md /data/workspace/AGENTS.md\n\
 cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md\n\
