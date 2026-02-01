@@ -86,10 +86,12 @@ echo "Model fallbacks configured"\n\
 if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then\n\
   echo "Gateway token auth enabled"\n\
   node dist/index.js config set gateway.auth.mode token || true\n\
+  node dist/index.js config set gateway.auth.token "$CLAWDBOT_GATEWAY_TOKEN" || true\n\
 fi\n\
 if [ -n "$CLAWDBOT_GATEWAY_PASSWORD" ]; then\n\
   echo "Gateway password auth enabled"\n\
   node dist/index.js config set gateway.auth.mode password || true\n\
+  node dist/index.js config set gateway.auth.password "$CLAWDBOT_GATEWAY_PASSWORD" || true\n\
 fi\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
