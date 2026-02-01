@@ -79,10 +79,9 @@ node dist/index.js config set channels.discord.dm.policy open || true\n\
 node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true\n\
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true\n\
 echo "Discord configured"\n\
-echo "Setting up model fallback chain: OpenAI -> Claude -> Gemini"\n\
+echo "Setting up model: OpenAI gpt-4o"\n\
 node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true\n\
-node dist/index.js config set agents.defaults.model.fallbacks "[\\\"anthropic/claude-opus-4-5\\\", \\\"google/gemini-1.5-pro\\\"]" || true\n\
-echo "Model fallbacks configured"\n\
+echo "Model configured"\n\
 if [ -n "\\$CLAWDBOT_GATEWAY_TOKEN" ]; then\n\
   echo "Gateway token auth enabled"\n\
   node dist/index.js config set gateway.auth.mode token || true\n\
