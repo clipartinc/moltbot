@@ -76,9 +76,9 @@ node dist/index.js config set channels.discord.dm.policy open || true\n\
 node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true\n\
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true\n\
 echo "Discord configured"\n\
-echo "Setting up model fallback chain: Claude -> OpenAI -> Gemini"\n\
-node dist/index.js config set agents.defaults.model.primary "anthropic/claude-opus-4-5" || true\n\
-node dist/index.js config set agents.defaults.model.fallbacks "[\\\"openai/gpt-4o\\\", \\\"google/gemini-1.5-pro\\\"]" || true\n\
+echo "Setting up model fallback chain: OpenAI -> Claude -> Gemini"\n\
+node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true\n\
+node dist/index.js config set agents.defaults.model.fallbacks "[\\\"anthropic/claude-opus-4-5\\\", \\\"google/gemini-1.5-pro\\\"]" || true\n\
 echo "Model fallbacks configured"\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
