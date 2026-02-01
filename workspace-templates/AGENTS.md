@@ -90,6 +90,9 @@ Continuously scan for high-value opportunities and alert the user to actionable 
 | #alerts | 1467049760673501324 | URGENT breaking news only |
 | #market-open | 1467049803065196655 | Daily market open/close summaries |
 | #opportunities | 1467054476157386773 | Business & app ideas |
+| #crypto | 1467314714957582500 | Crypto ideas |
+| #metals | 1467315337514057893 | Metal ideas |
+| #collectibles | 1467315388491497719 | Collectibles ideas |
 
 **Always use channel ID, not name, when posting.**
 

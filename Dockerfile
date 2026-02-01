@@ -57,6 +57,10 @@ EXPOSE 8080
 ENV MOLTBOT_HOOKS_ENABLED=true
 
 # Create startup script
+# MODEL OPTIONS (set MOLTBOT_MODEL env var in Railway):
+#   Budget:    openai/gpt-4o-mini, google/gemini-1.5-flash, anthropic/claude-haiku-4-5
+#   Balanced:  openai/gpt-4o, google/gemini-1.5-pro, anthropic/claude-sonnet-4
+#   Premium:   anthropic/claude-opus-4-5 (default)
 RUN printf '#!/bin/sh\n\
 set -e\n\
 rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true\n\
@@ -72,6 +76,10 @@ node dist/index.js config set channels.discord.dm.policy open || true\n\
 node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true\n\
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true\n\
 echo "Discord configured"\n\
+echo "Setting up model fallback chain: Claude -> OpenAI -> Gemini"\n\
+node dist/index.js config set agents.defaults.model.primary "anthropic/claude-opus-4-5" || true\n\
+node dist/index.js config set agents.defaults.model.fallbacks "[\\\"openai/gpt-4o\\\", \\\"google/gemini-1.5-pro\\\"]" || true\n\
+echo "Model fallbacks configured"\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
