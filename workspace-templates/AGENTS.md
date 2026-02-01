@@ -79,7 +79,9 @@ Continuously scan for high-value opportunities and alert the user to actionable 
 
 ---
 
-## DISCORD CHANNELS
+## DISCORD SERVER
+
+**Guild/Server ID: 1466968054079684608**
 
 | Channel | ID | Use For |
 |---------|-----|---------|
@@ -94,7 +96,7 @@ Continuously scan for high-value opportunities and alert the user to actionable 
 | #metals | 1467315337514057893 | Metal ideas |
 | #collectibles | 1467315388491497719 | Collectibles ideas |
 
-**Always use channel ID, not name, when posting.**
+**Always use channel ID, not name, when posting. Guild: 1466968054079684608**
 
 ---
 
