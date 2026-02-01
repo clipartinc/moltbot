@@ -83,6 +83,14 @@ echo "Setting up model fallback chain: OpenAI -> Claude -> Gemini"\n\
 node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true\n\
 node dist/index.js config set agents.defaults.model.fallbacks "[\\\"anthropic/claude-opus-4-5\\\", \\\"google/gemini-1.5-pro\\\"]" || true\n\
 echo "Model fallbacks configured"\n\
+if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then\n\
+  echo "Gateway token auth enabled"\n\
+  node dist/index.js config set gateway.auth.mode token || true\n\
+fi\n\
+if [ -n "$CLAWDBOT_GATEWAY_PASSWORD" ]; then\n\
+  echo "Gateway password auth enabled"\n\
+  node dist/index.js config set gateway.auth.mode password || true\n\
+fi\n\
 exec node dist/index.js gateway --bind lan --port ${PORT:-8080} --verbose\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
