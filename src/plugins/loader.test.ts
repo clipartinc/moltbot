@@ -2,20 +2,19 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
-
-import { loadMoltbotPlugins } from "./loader.js";
+import { afterAll, afterEach, describe, expect, it } from "vitest";
+import { loadOpenClawPlugins } from "./loader.js";
 
 type TempPlugin = { dir: string; file: string; id: string };
 
-const tempDirs: string[] = [];
-const prevBundledDir = process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR;
+const fixtureRoot = path.join(os.tmpdir(), `openclaw-plugin-${randomUUID()}`);
+let tempDirIndex = 0;
+const prevBundledDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
 
 function makeTempDir() {
-  const dir = path.join(os.tmpdir(), `moltbot-plugin-${randomUUID()}`);
+  const dir = path.join(fixtureRoot, `case-${tempDirIndex++}`);
   fs.mkdirSync(dir, { recursive: true });
-  tempDirs.push(dir);
   return dir;
 }
 
@@ -30,7 +29,7 @@ function writePlugin(params: {
   const file = path.join(dir, filename);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(dir, "moltbot.plugin.json"),
+    path.join(dir, "openclaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -45,32 +44,33 @@ function writePlugin(params: {
 }
 
 afterEach(() => {
-  for (const dir of tempDirs.splice(0)) {
-    try {
-      fs.rmSync(dir, { recursive: true, force: true });
-    } catch {
-      // ignore cleanup failures
-    }
-  }
   if (prevBundledDir === undefined) {
-    delete process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR;
+    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = prevBundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = prevBundledDir;
   }
 });
 
-describe("loadMoltbotPlugins", () => {
+afterAll(() => {
+  try {
+    fs.rmSync(fixtureRoot, { recursive: true, force: true });
+  } catch {
+    // ignore cleanup failures
+  }
+});
+
+describe("loadOpenClawPlugins", () => {
   it("disables bundled plugins by default", () => {
     const bundledDir = makeTempDir();
     writePlugin({
       id: "bundled",
       body: `export default { id: "bundled", register() {} };`,
       dir: bundledDir,
-      filename: "bundled.ts",
+      filename: "bundled.js",
     });
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -82,7 +82,7 @@ describe("loadMoltbotPlugins", () => {
     const bundled = registry.plugins.find((entry) => entry.id === "bundled");
     expect(bundled?.status).toBe("disabled");
 
-    const enabledRegistry = loadMoltbotPlugins({
+    const enabledRegistry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -121,13 +121,13 @@ describe("loadMoltbotPlugins", () => {
       outbound: { deliveryMode: "direct" }
     }
   });
-} };`,
+	} };`,
       dir: bundledDir,
-      filename: "telegram.ts",
+      filename: "telegram.js",
     });
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -150,11 +150,11 @@ describe("loadMoltbotPlugins", () => {
       id: "memory-core",
       body: `export default { id: "memory-core", kind: "memory", register() {} };`,
       dir: bundledDir,
-      filename: "memory-core.ts",
+      filename: "memory-core.js",
     });
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -177,10 +177,10 @@ describe("loadMoltbotPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@moltbot/memory-core",
+        name: "@openclaw/memory-core",
         version: "1.2.3",
         description: "Memory plugin package",
-        moltbot: { extensions: ["./index.ts"] },
+        openclaw: { extensions: ["./index.js"] },
       }),
       "utf-8",
     );
@@ -188,12 +188,12 @@ describe("loadMoltbotPlugins", () => {
       id: "memory-core",
       body: `export default { id: "memory-core", kind: "memory", name: "Memory (Core)", register() {} };`,
       dir: pluginDir,
-      filename: "index.ts",
+      filename: "index.js",
     });
 
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -211,13 +211,13 @@ describe("loadMoltbotPlugins", () => {
     expect(memory?.version).toBe("1.2.3");
   });
   it("loads plugins from config paths", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "allowed",
       body: `export default { id: "allowed", register(api) { api.registerGatewayMethod("allowed.ping", ({ respond }) => respond(true, { ok: true })); } };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -234,13 +234,13 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("denylist disables plugins even if allowed", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "blocked",
       body: `export default { id: "blocked", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -257,13 +257,13 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("fails fast on invalid plugin config", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "configurable",
       body: `export default { id: "configurable", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -284,7 +284,7 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("registers channel plugins", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "channel-demo",
       body: `export default { id: "channel-demo", register(api) {
@@ -309,7 +309,7 @@ describe("loadMoltbotPlugins", () => {
 } };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -325,7 +325,7 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("registers http handlers", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "http-demo",
       body: `export default { id: "http-demo", register(api) {
@@ -333,7 +333,7 @@ describe("loadMoltbotPlugins", () => {
 } };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -351,7 +351,7 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("registers http routes", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "http-route-demo",
       body: `export default { id: "http-route-demo", register(api) {
@@ -359,7 +359,7 @@ describe("loadMoltbotPlugins", () => {
 } };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       workspaceDir: plugin.dir,
       config: {
@@ -378,13 +378,13 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("respects explicit disable in config", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const plugin = writePlugin({
       id: "config-disable",
       body: `export default { id: "config-disable", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -401,7 +401,7 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("enforces memory slot selection", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const memoryA = writePlugin({
       id: "memory-a",
       body: `export default { id: "memory-a", kind: "memory", register() {} };`,
@@ -411,7 +411,7 @@ describe("loadMoltbotPlugins", () => {
       body: `export default { id: "memory-b", kind: "memory", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -428,13 +428,13 @@ describe("loadMoltbotPlugins", () => {
   });
 
   it("disables memory plugins when slot is none", () => {
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
     const memory = writePlugin({
       id: "memory-off",
       body: `export default { id: "memory-off", kind: "memory", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {
@@ -456,14 +456,14 @@ describe("loadMoltbotPlugins", () => {
       dir: bundledDir,
       filename: "shadow.js",
     });
-    process.env.CLAWDBOT_BUNDLED_PLUGINS_DIR = bundledDir;
+    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledDir;
 
     const override = writePlugin({
       id: "shadow",
       body: `export default { id: "shadow", register() {} };`,
     });
 
-    const registry = loadMoltbotPlugins({
+    const registry = loadOpenClawPlugins({
       cache: false,
       config: {
         plugins: {

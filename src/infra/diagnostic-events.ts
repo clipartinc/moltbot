@@ -1,4 +1,4 @@
-import type { MoltbotConfig } from "../config/config.js";
+import type { OpenClawConfig } from "../config/config.js";
 
 export type DiagnosticSessionState = "idle" | "processing" | "waiting";
 
@@ -20,6 +20,13 @@ export type DiagnosticUsageEvent = DiagnosticBaseEvent & {
     cacheRead?: number;
     cacheWrite?: number;
     promptTokens?: number;
+    total?: number;
+  };
+  lastCallUsage?: {
+    input?: number;
+    output?: number;
+    cacheRead?: number;
+    cacheWrite?: number;
     total?: number;
   };
   context?: {
@@ -149,7 +156,7 @@ export type DiagnosticEventInput = DiagnosticEventPayload extends infer Event
 let seq = 0;
 const listeners = new Set<(evt: DiagnosticEventPayload) => void>();
 
-export function isDiagnosticsEnabled(config?: MoltbotConfig): boolean {
+export function isDiagnosticsEnabled(config?: OpenClawConfig): boolean {
   return config?.diagnostics?.enabled === true;
 }
 
