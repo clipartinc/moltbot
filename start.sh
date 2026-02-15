@@ -25,9 +25,9 @@ node dist/index.js config set "channels.discord.guilds.*.requireMention" false |
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true
 echo "Discord configured"
 
-# Configure model (Kimi K2 primary, OpenAI fallback)
-echo "Setting up model: Kimi K2 (primary), OpenAI gpt-4o (fallback)"
-node dist/index.js config set agents.defaults.model.primary "moonshot/kimi-k2-0905-preview" || true
+# Configure model (OpenAI primary)
+echo "Setting up model: OpenAI gpt-4o"
+node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true
 echo "Model configured"
 
 # Configure heartbeat model (Kimi K2 via Moonshot - cheaper for periodic checks)
