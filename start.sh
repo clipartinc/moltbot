@@ -20,7 +20,7 @@ echo "Workspace files copied"
 echo "Configuring Discord..."
 node dist/index.js config set channels.discord.enabled true || true
 node dist/index.js config set channels.discord.groupPolicy open || true
-node dist/index.js config set channels.discord.dm.policy open || true
+node dist/index.js config set channels.discord.dmPolicy open || true
 node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true
 echo "Discord configured"
