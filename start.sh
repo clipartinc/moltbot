@@ -25,15 +25,15 @@ node dist/index.js config set "channels.discord.guilds.*.requireMention" false |
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true
 echo "Discord configured"
 
-# Configure model (OpenAI primary)
-echo "Setting up model: OpenAI gpt-4o"
-node dist/index.js config set agents.defaults.model.primary "openai/gpt-4o" || true
+# Configure model (Kimi K2.5 via Moonshot)
+echo "Setting up model: Kimi K2.5"
+node dist/index.js config set agents.defaults.model.primary "moonshot/kimi-k2.5" || true
 echo "Model configured"
 
-# Configure heartbeat model (Kimi K2 via Moonshot - cheaper for periodic checks)
+# Configure heartbeat model
 if [ -n "$MOONSHOT_API_KEY" ]; then
-  echo "Configuring Kimi K2 for heartbeats"
-  node dist/index.js config set agents.defaults.heartbeat.model "moonshot/kimi-k2-0905-preview" || true
+  echo "Configuring Kimi K2.5 for heartbeats"
+  node dist/index.js config set agents.defaults.heartbeat.model "moonshot/kimi-k2.5" || true
   echo "Kimi heartbeat model configured"
 fi
 
