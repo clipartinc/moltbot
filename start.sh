@@ -17,6 +17,10 @@ cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md
 cp -rf /app/workspace-init/openclaw-skills /data/workspace/
 echo "Workspace files copied"
 
+# Run doctor to fix any config migrations
+echo "Running doctor..."
+node dist/index.js doctor --fix || true
+
 # Configure Discord (using new v2026.2.14 config paths)
 echo "Configuring Discord..."
 node dist/index.js config set channels.discord.enabled true || true
