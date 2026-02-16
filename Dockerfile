@@ -24,7 +24,8 @@ COPY scripts ./scripts
 RUN pnpm install --frozen-lockfile
 
 # Cache bust - increment to force full rebuild
-ARG CACHE_BUST=2
+ARG CACHE_BUST=3
+RUN echo "Build version: $(node -e \"console.log(require('./package.json').version)\")"
 COPY . .
 RUN pnpm build
 # Force pnpm for UI build (Bun may fail on ARM/Synology architectures)
