@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "Starting Moltbot..."
+echo "Starting OpenClaw v2026.2.14..."
 
 # Cleanup old config and lock files
 rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true
