@@ -4,10 +4,11 @@ set -e
 echo "Starting OpenClaw v2026.2.14..."
 
 # Cleanup old config and lock files
-rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json 2>/dev/null || true
+rm -f /root/.moltbot/moltbot.json /root/.clawdbot/clawdbot.json /root/.openclaw/openclaw.json 2>/dev/null || true
 echo "Cleaning up stale lock files..."
 find /data -name "*.lock" -type f -delete 2>/dev/null || true
 find /root/.clawdbot -name "*.lock" -type f -delete 2>/dev/null || true
+find /root/.openclaw -name "*.lock" -type f -delete 2>/dev/null || true
 
 # Copy workspace files
 mkdir -p /data/workspace
@@ -16,11 +17,12 @@ cp -f /app/workspace-init/SOUL.md /data/workspace/SOUL.md
 cp -rf /app/workspace-init/openclaw-skills /data/workspace/
 echo "Workspace files copied"
 
-# Configure Discord
+# Configure Discord (using new v2026.2.14 config paths)
 echo "Configuring Discord..."
 node dist/index.js config set channels.discord.enabled true || true
 node dist/index.js config set channels.discord.groupPolicy open || true
 node dist/index.js config set channels.discord.dmPolicy open || true
+node dist/index.js config set channels.discord.allowFrom '["*"]' || true
 node dist/index.js config set "channels.discord.guilds.*.requireMention" false || true
 node dist/index.js config set "channels.discord.guilds.*.channels.*.requireMention" false || true
 echo "Discord configured"
@@ -37,8 +39,9 @@ if [ -n "$MOONSHOT_API_KEY" ]; then
   echo "Kimi heartbeat model configured"
 fi
 
-# Configure gateway auth
-if [ -n "$CLAWDBOT_GATEWAY_TOKEN" ]; then
+# Configure gateway auth (support both old and new env var names)
+GATEWAY_TOKEN="${OPENCLAW_GATEWAY_TOKEN:-$CLAWDBOT_GATEWAY_TOKEN}"
+if [ -n "$GATEWAY_TOKEN" ]; then
   echo "Gateway token auth enabled"
   node dist/index.js config set gateway.auth.mode token || true
   node dist/index.js config set gateway.controlUi.allowInsecureAuth true || true
